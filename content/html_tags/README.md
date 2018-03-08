@@ -6,12 +6,12 @@ createTag('div', {id: 'anyid', class: 'anyclass'}, [p], 'any text');
 
 Результат:
 
-`
+```
 <div id="anyid" class="anyclass">
     <p></p>
     "any text"
 </div>
-`
+```
 
 Первый элемент всегда имя тэга.
 Очередность остальных параметров не важна, однако В DOM дереве они будут в том же порядке, в каком заданы в функции.
@@ -29,7 +29,7 @@ createTag('div', {id: 'anyid', class: 'anyclass'}, [p], 'any text');
 
 ```javascript
 [p, div, table]
-//В примере переменные (ссылки на созданные Element node)
+//В примере перечислены переменные (ссылки на созданные Element node)
 ```
 
 * Text node:
