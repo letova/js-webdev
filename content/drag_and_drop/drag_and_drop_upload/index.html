@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Drag and drop</title>
+    <link rel="stylesheet" href="draganddrop.css">
+</head>
+<body>
+    <div class="wrap">
+        <div id="drop-area">
+            <form class="my-form">
+                <p>Загрузите изображения с помощью диалога выбора файлов или перетащив нужные изображения в выделенную область</p>
+                <input type="file" id="fileElem" multiple accept="image/*" onchange="handleFiles(this.files)">
+                <label class="button" for="fileElem">Выбрать изображения</label>
+                <progress id="progress-bar" max=100 value=0></progress>
+            </form>
+            <div id="gallery"></div>
+        </div>
+    </div>
+    <script src="draganddrop.js"></script>
+</body>
+</html>

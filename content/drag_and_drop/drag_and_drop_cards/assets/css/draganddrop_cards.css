@@ -1,0 +1,134 @@
+body {
+  margin: 0;
+  background: #eeeaea; }
+
+.wrap {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 15px; }
+
+/* 
+ * DROP
+ */
+.drop-wrap {
+  display: flex;
+  padding-bottom: 25px; }
+
+.drop-describe-wrap {
+  flex: 0 0 25%; }
+
+.drop-describe {
+  padding-left: 10px;
+  font-size: 20px;
+  font-weight: bold;
+  font-family: 'Courier New', Courier, monospace; }
+
+.drop-field {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  min-height: 200px;
+  margin: 0 10px;
+  border: 3px dashed lightseagreen;
+  background: white; }
+
+/* 
+ * CARDS
+ */
+.cards-wrap {
+  display: flex;
+  padding: 5px;
+  flex-wrap: wrap; }
+
+.person-card {
+  flex-basis: 25%;
+  padding: 5px;
+  font-family: Arial, sans-serif;
+  box-sizing: border-box; }
+
+.person-card__in-wrap {
+  position: relative;
+  min-height: 155px;
+  padding: 15px;
+  background: white;
+  border-radius: 4px;
+  box-shadow: 2px 2px 5px rgba(10, 10, 10, 0.1);
+  cursor: pointer; }
+
+.person-card__main-content {
+  display: flex; }
+
+.person-card__collumn_fix {
+  flex: 0 0 70px; }
+
+.person-card__collumn_stretch {
+  flex: 1; }
+
+.person-card__image-wrap {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  overflow: hidden; }
+
+.person-card__image {
+  width: 100%;
+  transform: translateY(-10%); }
+
+.person-card__describe {
+  margin: 0;
+  padding: 0 0 0 20px;
+  list-style: none; }
+
+.person-card__name {
+  font-size: 16px;
+  font-weight: bold;
+  padding-bottom: 10px; }
+
+.person-card__sex {
+  font-size: 14px;
+  color: #646464; }
+
+.person-card__age {
+  font-size: 14px;
+  color: #646464; }
+
+.person-card__statistics {
+  position: absolute;
+  display: flex;
+  left: 0;
+  bottom: 15px;
+  width: 100%;
+  color: #646464;
+  background: #fafafa; }
+
+.person-card__collumn_third {
+  flex: 1;
+  padding: 10px 0;
+  text-align: center;
+  border-right: 1px dotted gainsboro; }
+
+.person-card__collumn_third:last-child {
+  border-right: none; }
+
+.person-card__subtitle {
+  margin: 0;
+  padding-bottom: 5px;
+  font-size: 14px; }
+
+.person-card__status {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 15px;
+  font-size: 12px;
+  text-align: center;
+  border-radius: 0 0 4px 4px; }
+
+.status_true {
+  background: #a2ffa2; }
+
+.status_false {
+  background: #ff8f8f; }
+
+/*# sourceMappingURL=draganddrop_cards.css.map */
