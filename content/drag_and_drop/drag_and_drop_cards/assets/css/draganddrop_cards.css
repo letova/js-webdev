@@ -1,11 +1,20 @@
+html {
+  height: 100%;
+  background: url(../img/bg.jpg); }
+
 body {
+  min-height: 100%;
   margin: 0;
-  background: #eeeaea; }
+  background: rgba(238, 234, 234, 0.93);
+  -ms-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  user-select: none; }
 
 .wrap {
   max-width: 1200px;
-  margin: 20px auto;
-  padding: 15px; }
+  margin: 0 auto;
+  padding: 35px 15px; }
 
 /* 
  * DROP
@@ -15,11 +24,12 @@ body {
   padding-bottom: 25px; }
 
 .drop-describe-wrap {
-  flex: 0 0 25%; }
+  flex: 0 0 25%;
+  box-sizing: border-box; }
 
 .drop-describe {
   padding-left: 10px;
-  font-size: 20px;
+  font-size: 19px;
   font-weight: bold;
   font-family: 'Courier New', Courier, monospace; }
 
@@ -28,7 +38,6 @@ body {
   display: flex;
   flex-wrap: wrap;
   min-height: 200px;
-  margin: 0 10px;
   border: 3px dashed lightseagreen;
   background: white; }
 
@@ -46,6 +55,9 @@ body {
   font-family: Arial, sans-serif;
   box-sizing: border-box; }
 
+.person-card_third {
+  flex-basis: 33.33%; }
+
 .person-card__in-wrap {
   position: relative;
   min-height: 155px;
@@ -53,7 +65,51 @@ body {
   background: white;
   border-radius: 4px;
   box-shadow: 2px 2px 5px rgba(10, 10, 10, 0.1);
+  transition: all 0.3s ease-out 0s;
   cursor: pointer; }
+
+.person-card__close-wrap {
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  top: 3px;
+  right: 3px; }
+
+.person-card__close-wrap_hidden {
+  display: none; }
+
+.person-card__close-button {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+  background: white; }
+
+.person-card__close-button:focus {
+  outline: 1px dotted #b4b4b4; }
+
+.person-card__close-button:hover::after,
+.person-card__close-button:hover::before {
+  background: #969696; }
+
+.person-card__close-button::after,
+.person-card__close-button::before {
+  position: absolute;
+  content: '';
+  top: 12px;
+  left: 0;
+  width: 25px;
+  height: 1px;
+  transform: rotate(45deg);
+  background: #b4b4b4; }
+
+.person-card__close-button::before {
+  transform: rotate(45deg); }
+
+.person-card__close-button::after {
+  transform: rotate(-45deg); }
 
 .person-card__main-content {
   display: flex; }
@@ -125,10 +181,17 @@ body {
   text-align: center;
   border-radius: 0 0 4px 4px; }
 
-.status_true {
+.status_true .person-card__status {
   background: #a2ffa2; }
 
-.status_false {
+.cards-wrap .status_true .person-card__in-wrap:hover {
+  box-shadow: 1px 1px 16px rgba(10, 10, 10, 0.3);
+  transform: translateY(-1px); }
+
+.status_false .person-card__status {
   background: #ff8f8f; }
+
+.status_false .person-card__in-wrap {
+  cursor: not-allowed; }
 
 /*# sourceMappingURL=draganddrop_cards.css.map */

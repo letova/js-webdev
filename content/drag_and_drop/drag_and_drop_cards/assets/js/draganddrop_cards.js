@@ -48,8 +48,8 @@ const data = [
     {"id": "1", "name": "Kim Smith", "img": "assets/img/women-5.jpg","sex": "female", "age": "33", "rank": "1", "games": "15","victory": "14", "player_status": true}];
 
 const createPlayerCard = (player) => {
-    const playerStatus = (player['player_status'] === true) ? 'Подтвержден' : 'Неподтвержден';
-    const playerStatusStyle = (player['player_status'] === true) ? 'person-card__status status_true' : 'person-card__status status_false';
+    const playerStatus = (player['player_status'] === true) ? 'Подтвержден' : 'Не подтвержден';
+    const playerStatusStyle = (player['player_status'] === true) ? 'draggable status_true' : 'status_false';
 
     const createPlayerStat = (title, value) => {
         return createTag('div', {'class': 'person-card__collumn_third'}, 
@@ -75,7 +75,7 @@ const createPlayerCard = (player) => {
                             ]
                         );
 
-    return createTag('div', {'class': 'person-card draggable'}, 
+    return createTag('div', {'class': 'person-card ' + playerStatusStyle}, 
                 [createTag('div', {'class': 'person-card__in-wrap'}, 
                     [createTag('div', {'class': 'person-card__main-content'}, 
                         [
@@ -91,13 +91,20 @@ const createPlayerCard = (player) => {
                                 createPlayerStat('Victory', player['victory'])
                             ]
                         ),
-                        createTag('div', {'class': playerStatusStyle}, 
+                        createTag('div', {'class': 'person-card__status'}, 
                             [createTag('span', playerStatus)]
                         )
                         ]
+                    ),
+                    createTag('div', {'class': 'person-card__close-wrap person-card__close-wrap_hidden'},
+                        [createTag('button', {'class': 'person-card__close-button'})]
                     )]
                 )]
             );
+};
+
+const toggleCloseButtonVisibility = (button) => {
+    button.classList.toggle('person-card__close-wrap_hidden');
 };
 
 const cardsWrap = document.querySelector('.cards-wrap');
@@ -114,6 +121,14 @@ const getPosition = (element) => {
     };
 };
 
+const getSize = (element) => {
+    const box = element.getBoundingClientRect();
+    return {
+        height: box.bottom - box.top,
+        width: box.right - box.left
+    };
+};
+
 const getClosest = (element) => {
     //
 };
@@ -123,10 +138,10 @@ const createAvatar = function(event) {
     const old = {
       parent: avatar.parentNode,
       nextSibling: avatar.nextSibling,
-      position: avatar.position || '',
-      left: avatar.left || '',
-      top: avatar.top || '',
-      zIndex: avatar.zIndex || ''
+      position: avatar.style.position || '',
+      left: avatar.style.left || '',
+      top: avatar.style.top || '',
+      zIndex: avatar.style.zIndex || ''
     };
   
     // функция для отмены переноса
@@ -156,14 +171,17 @@ const findDroppable = function(event) {
 };
 
 const onDragEnd = function(dragObject, dropElement) {
-    //dragObject.element.hidden = true;
     droppable.appendChild(dragObject.element);
+
     dragObject.element.style.position = 'static';
-    dropElement.classList.add('any-style');
-  
-    setTimeout(function() {
-        dropElement.classList.remove('any-style');
-    }, 200);
+    dragObject.element.style.height = 'auto';
+    dragObject.element.style.width = 'auto';
+
+    dragObject.element.classList.add('person-card_third');
+
+    const button = dragObject.element.querySelector('.person-card__close-wrap');
+    toggleCloseButtonVisibility(button);
+    button.addEventListener('click', removeFromDropZone);
 };
   
 const onDragCancel = function(dragObject) {
@@ -176,6 +194,8 @@ const startDrag = function(event) {
     document.body.appendChild(avatar);
     avatar.style.zIndex = 9999;
     avatar.style.position = 'absolute';
+    avatar.style.height = dragObject.height + 'px';
+    avatar.style.width = dragObject.width + 'px';
 };
 
 const finishDrag = function(event) { 
@@ -199,6 +219,8 @@ const onMouseDown = function(event) {
     if (!element) return;
 
     dragObject.element = element;
+    dragObject.height = getSize(element).height;
+    dragObject.width = getSize(element).width;
     dragObject.downX = event.pageX;
     dragObject.downY = event.pageY;
 };
@@ -242,183 +264,31 @@ const onMouseUp = function(event) {
     dragObject = {};
 };
 
-document.addEventListener('mousedown', onMouseDown);
+const addToDropZone = function(event) {
+    if (event.which != 1) return; 
+
+    const element = event.target.closest('.draggable');
+    droppable.appendChild(element);
+    element.classList.add('person-card_third');
+
+    const button = element.querySelector('.person-card__close-wrap');
+    toggleCloseButtonVisibility(button);
+    button.addEventListener('click', removeFromDropZone);
+};
+
+const removeFromDropZone = function(event) {
+    if (event.which != 1) return; 
+
+    const button = event.target.closest('.person-card__close-wrap');
+    const element = event.target.closest('.draggable');
+
+    toggleCloseButtonVisibility(button);
+    cardsWrap.appendChild(element);
+    element.classList.remove('person-card_third');
+};
+
+//document.body.onselectstart = function() {return false};
+cardsWrap.addEventListener('click', addToDropZone);
+cardsWrap.addEventListener('mousedown', onMouseDown);
 document.addEventListener('mousemove', onMouseMove);
 document.addEventListener('mouseup', onMouseUp);
-
-
-  
-
-/*
-  var DragManager = new function() {
-  
-
-    var dragObject = {};
-  
-    var self = this;
-  
-    function onMouseDown(e) {
-  
-      if (e.which != 1) return;
-  
-      var elem = e.target.closest('.draggable');
-      if (!elem) return;
-  
-      dragObject.elem = elem;
-  
-      // запомним, что элемент нажат на текущих координатах pageX/pageY
-      dragObject.downX = e.pageX;
-      dragObject.downY = e.pageY;
-  
-      return false;
-    }
-  
-    function onMouseMove(e) {
-      if (!dragObject.elem) return; // элемент не зажат
-  
-      if (!dragObject.avatar) { // если перенос не начат...
-        var moveX = e.pageX - dragObject.downX;
-        var moveY = e.pageY - dragObject.downY;
-  
-        // если мышь передвинулась в нажатом состоянии недостаточно далеко
-        if (Math.abs(moveX) < 3 && Math.abs(moveY) < 3) {
-          return;
-        }
-  
-        // начинаем перенос
-        dragObject.avatar = createAvatar(e); // создать аватар
-        if (!dragObject.avatar) { // отмена переноса, нельзя "захватить" за эту часть элемента
-          dragObject = {};
-          return;
-        }
-  
-        // аватар создан успешно
-        // создать вспомогательные свойства shiftX/shiftY
-        var coords = getCoords(dragObject.avatar);
-        dragObject.shiftX = dragObject.downX - coords.left;
-        dragObject.shiftY = dragObject.downY - coords.top;
-  
-        startDrag(e); // отобразить начало переноса
-      }
-  
-      // отобразить перенос объекта при каждом движении мыши
-      dragObject.avatar.style.left = e.pageX - dragObject.shiftX + 'px';
-      dragObject.avatar.style.top = e.pageY - dragObject.shiftY + 'px';
-  
-      return false;
-    }
-  
-    function onMouseUp(e) {
-      if (dragObject.avatar) { // если перенос идет
-        finishDrag(e);
-      }
-  
-      // перенос либо не начинался, либо завершился
-      // в любом случае очистим "состояние переноса" dragObject
-      dragObject = {};
-    }
-  
-    function finishDrag(e) {
-      var dropElem = findDroppable(e);
-  
-      if (!dropElem) {
-        self.onDragCancel(dragObject);
-      } else {
-        self.onDragEnd(dragObject, dropElem);
-      }
-    }
-  
-    function createAvatar(e) {
-  
-      // запомнить старые свойства, чтобы вернуться к ним при отмене переноса
-      var avatar = dragObject.elem;
-      var old = {
-        parent: avatar.parentNode,
-        nextSibling: avatar.nextSibling,
-        position: avatar.position || '',
-        left: avatar.left || '',
-        top: avatar.top || '',
-        zIndex: avatar.zIndex || ''
-      };
-  
-      // функция для отмены переноса
-      avatar.rollback = function() {
-        old.parent.insertBefore(avatar, old.nextSibling);
-        avatar.style.position = old.position;
-        avatar.style.left = old.left;
-        avatar.style.top = old.top;
-        avatar.style.zIndex = old.zIndex
-      };
-  
-      return avatar;
-    }
-  
-    function startDrag(e) {
-      var avatar = dragObject.avatar;
-  
-      // инициировать начало переноса
-      document.body.appendChild(avatar);
-      avatar.style.zIndex = 9999;
-      avatar.style.position = 'absolute';
-    }
-  
-    function findDroppable(event) {
-      // спрячем переносимый элемент
-      dragObject.avatar.hidden = true;
-  
-      // получить самый вложенный элемент под курсором мыши
-      var elem = document.elementFromPoint(event.clientX, event.clientY);
-  
-      // показать переносимый элемент обратно
-      dragObject.avatar.hidden = false;
-  
-      if (elem == null) {
-        // такое возможно, если курсор мыши "вылетел" за границу окна
-        return null;
-      }
-  
-      return elem.closest('.droppable');
-    }
-  
-    document.onmousemove = onMouseMove;
-    document.onmouseup = onMouseUp;
-    document.onmousedown = onMouseDown;
-  
-    this.onDragEnd = function(dragObject, dropElem) {};
-    this.onDragCancel = function(dragObject) {};
-  
-  };
-  
-  
-  function getCoords(elem) { // кроме IE8-
-    var box = elem.getBoundingClientRect();
-  
-    return {
-      top: box.top + pageYOffset,
-      left: box.left + pageXOffset
-    };
-  
-  }
-
-
-  DragManager.onDragEnd = function(dragObject, dropElem) {
-
-    // скрыть/удалить переносимый объект
-    dragObject.elem.hidden = true;
-  
-    // успешный перенос, показать улыбку классом computer-smile
-    dropElem.className = 'computer computer-smile';
-  
-    // убрать улыбку через 0.2 сек
-    setTimeout(function() {
-      dropElem.classList.remove('computer-smile');
-    }, 200);
-  };
-  
-  DragManager.onDragCancel = function(dragObject) {
-    // откат переноса
-    dragObject.avatar.rollback();
-  };
-
-  */
-
